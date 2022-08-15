@@ -1,1 +1,1 @@
-# Download-Blinkist-Free-Daily
+# Download Blinkist Free Daily
