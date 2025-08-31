@@ -29,7 +29,6 @@ scraper = cloudscraper.create_scraper()
     before_sleep=lambda retry_state: console.print(f"Retrying in {retry_state.next_action.sleep} seconds..."),
 )
 
-
 def _request(url, **kwargs):
     # Wrapper for verifying and retrying GET requests.
     kwargs.setdefault('headers', HEADERS)
@@ -94,6 +93,7 @@ def download_chapter_audio(book, chapter_data):
         return
 
     assert 'm4a' in chapter_data['signed_audio_url']
+    console.print(f"\nDownloading audio file for: 0{chapter['order_no']} - {chapter['action_title']}")
     response = _request(chapter_data['signed_audio_url'])
     assert response.status_code == 200
     file_path.write_bytes(response.content)
@@ -175,9 +175,10 @@ with console.status(f"Retrieving chapters of {book['title']}..."):
 # fetch chapter content
 chapters = [get_chapter(book['id'], chapter['id'])
             for chapter in track(chapter_list, description='Fetching chapters...')]
+print("\n")
 for chapter in chapters:
     console.print(f"0{chapter['order_no']} - {chapter['action_title']}")
-
+print("\n")
 
 # download text
 with console.status(f"Downloading book text..."):
